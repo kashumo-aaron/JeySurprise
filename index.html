@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pour Jemimah ❤️</title>
+    <!-- Script externe pour lancer les effets de confettis -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* --- STYLE GENERAL POUR MOBILE --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #fff0f5; /* Rose pastel doux */
+            color: #4a4a4a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        /* --- STYLES DU POP-UP / MODALE --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 28px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            max-width: 340px;
+            width: 100%;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-emoji {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            color: #d81b60;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            position: relative;
+            min-height: 50px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            outline: none;
+        }
+
+        .btn-yes {
+            background-color: #ff4081;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+            flex: 1;
+        }
+
+        .btn-yes:active {
+            transform: scale(0.95);
+        }
+
+        .btn-no {
+            background-color: #e0e0e0;
+            color: #666;
+            position: relative;
+            flex: 1;
+        }
+
+        /* --- STYLES DU CONTENU PRINCIPAL DE LA PAGE --- */
+        .main-container {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: 28px;
+            padding: 24px 20px;
+            box-shadow: 0 8px 25px rgba(216, 27, 96, 0.08);
+            text-align: center;
+            display: none; /* Cliqué OUI pour afficher */
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-title {
+            font-size: 26px;
+            color: #d81b60;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 220px;
+            background-color: #ffe4e8;
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 2px dashed #ff80ab;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        .trap-message {
+            background: #fff5f8;
+            border-left: 4px solid #ff4081;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #4a4a4a;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #d81b60;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .compliments-list {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .compliments-list li {
+            background: #fdf2f5;
+            padding: 12px 14px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* ZONE D'IMAGE POUVERTURE / ZOON DESSIN (draw.png) */
+        .draw-box {
+            margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ffb6c1;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .draw-box img {
+            width: 100%;
+            max-height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .draw-hint {
+            font-size: 10px;
+            color: #ff4081;
+            margin-top: 4px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        /* MODALE POUR AGRANDIR LE DESSIN (draw.png) */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 15px;
+        }
+
+        .lightbox-overlay img {
+            max-width: 95%;
+            max-height: 85%;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+        }
+
+        .cta-button {
+            display: block;
+            width: 100%;
+            background: #25d366; /* Couleur WhatsApp */
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .cta-button:active {
+            transform: scale(0.97);
+        }
+
+        .thanks-message {
+            margin-top: 20px;
+            padding: 12px;
+            background: #fff0f3;
+            border-radius: 12px;
+            font-size: 13px;
+            color: #d81b60;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .footer-note {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- POP-UP INTERACTIF -->
+    <div class="modal-overlay" id="popup">
+        <div class="modal-card">
+            <div class="modal-emoji">🕵️‍♀️✨</div>
+            <div class="modal-title">Verification rapide !</div>
+            <div class="modal-text">Est-ce bien toi, Jemimah Kash ?</div>
+            <div class="btn-group">
+                <button class="btn btn-yes" onclick="accepterPiege()">Oui, c'est moi !</button>
+                <button class="btn btn-no" id="btnNo">Non</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENU PRINCIPAL DE LA PAGE -->
+    <div class="main-container" id="mainContent">
+        <h1 class="header-title">Grand Bonjour Jemimah Kash ! 👋❤️</h1>
+        <p class="subtitle">La meilleure grande sœur au monde</p>
+
+        <!-- ESPACE POUR LA PHOTO -->
+        <div class="photo-placeholder">
+            <!-- Remplace "photo.jpg" par le lien ou le nom de la photo de Jemimah -->
+            <img src="img.png" alt="Photo de Jemimah">
+        </div>
+
+        <!-- MESSAGE PIÈGE -->
+        <div class="trap-message">
+            <strong> Surprise ! 🎉</strong><br>
+            Tu étais juste venue ici pour voir une photo, mais tu es surprise de trouver tout ça ! C'était un petit piège mignon préparé spécialement pour toi.
+        </div>
+
+        <!-- NOUVELLE SECTION : LES PREMIÈRES FOIS POUR TOI -->
+        <div class="section-title">Pour toi, toujours en premier :</div>
+        <ul class="compliments-list">
+            <li>
+                🎨 <strong>1.</strong> J'ai appris à dessiner... et je t'ai dessinée en premier ! ❤️
+                <!-- Zone d'image pour draw.png -->
+                <div class="draw-box" onclick="ouvrirDessin()">
+                    <img src="draw.png" alt="Dessin pour Jemimah" onerror="this.src='https://picsum.photos/300/150?art'">
+                </div>
+                <div class="draw-hint">🔍 Clique sur le dessin pour l'agrandir</div>
+            </li>
+            <li>
+                🎵 <strong>2.</strong> J'ai appris à créer des chansons avec l'IA... et j'ai chanté pour toi en premier ! 🎶
+            </li>
+            <li>
+                💻 <strong>3.</strong> J'apprends l'informatique... et voilà que je te fais le plus beau des sites en premier ! 🚀
+            </li>
+        </ul>
+
+        <!-- MESSAGE DE REMERCIEMENT TOUCHANT -->
+        <div class="thanks-message">
+            💖 Merci du fond du cœur de toujours soutenir mon travail, mes projets et mes passions. Avoir une grande sœur comme toi est la plus belle des motivations !
+        </div>
+        <br>
+
+        <!-- BOUTON WHATSAPP -->
+        <a href="https://wa.me/?text=D'accord,%20tu%20m'as%20bien%20eue%20!%20Merci%20pour%20ce%20super%20petit%20site%20%F0%9F%A5%BA%E2%9D%A4%EF%B8%8F" class="cta-button" target="_blank">
+            Réclamer un gros câlin sur WhatsApp 📲
+        </a>
+
+        <div class="footer-note">Fait avec ❤️ spécialement pour toi</div>
+    </div>
+
+    <!-- LIGHTBOX / ZOOM DU DESSIN (draw.png) -->
+    <div class="lightbox-overlay" id="lightbox" onclick="fermerDessin()">
+        <img id="lightboxImg" src="draw.png" alt="Dessin agrandi" onerror="this.src='https://picsum.photos/300/150?art'">
+    </div>
+
+    <!-- CODE JAVASCRIPT POUR L'INTERACTIVITÉ -->
+    <script>
+        const btnNo = document.getElementById('btnNo');
+
+        // Fonction quand elle tente de toucher le bouton "Non" sur mobile
+        function esquiver() {
+            const x = Math.random() * (window.innerWidth - 100) - (window.innerWidth / 2 - 50);
+            const y = Math.random() * (window.innerHeight - 100) - (window.innerHeight / 2 - 50);
+            
+            btnNo.style.position = 'absolute';
+            btnNo.style.transform = `translate(${x}px, ${y}px)`;
+            btnNo.innerText = "Menteuse ! 😉";
+        }
+
+        // Événements mobile pour l'esquive du bouton "Non"
+        btnNo.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            esquiver();
+        });
+        btnNo.addEventListener('mouseover', esquiver);
+
+        // Fonction quand elle clique sur "Oui"
+        function accepterPiege() {
+            document.getElementById('popup').style.display = 'none';
+            
+            const main = document.getElementById('mainContent');
+            main.style.display = 'block';
+
+            // Lancement des confettis !
+            confetti({
+                particleCount: 120,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 50,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+            }, 400);
+        }
+
+        // Fonctions pour ouvrir et fermer le dessin en grand
+        function ouvrirDessin() {
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        function fermerDessin() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
